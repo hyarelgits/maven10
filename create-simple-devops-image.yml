@@ -1,0 +1,20 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+    - name: create docker image using war file
+      command: docker build -t hyarel1-image:latest .
+      args:
+        chdir: /opt/docker
+
+    - name: create tag to image
+      command: docker tag hyarel1-image hyareldocker1/hyarelmaster
+
+    - name: push image on to dockerhub
+      command: docker push hyareldocker1/hyarelmaster
+
+    - name: remove docker images from ansible server
+      command: docker rmi tomcat hyarel-image:latest hyareldocker1/hyarelmaster
+      ignore_errors: yes

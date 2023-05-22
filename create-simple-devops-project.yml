@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+
+    - name: stop current running container
+      command: docker stop hyarel-devops-container
+      ignore_errors: yes
+
+    - name: remove stopped docker container
+      command: docker rm hyarel-devops-container
+      ignore_errors: yes
+
+    - name: remove current docker image
+      command: docker rmi hyareldocker1/hyarelmaster:latest
+      ignore_errors: yes
+
+    - name: pull docker image from dockerhub
+      command: docker pull hyareldocker1/hyarelmaster:latest
+
+    - name: creating docker container using simple-devops-image
+      command: docker run -d --name hyarel-devops-container -p 8080:8080 hyareldocker1/hyarelmaster:latest
